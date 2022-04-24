@@ -1,7 +1,7 @@
 /// A `Crate` is the root of the emitted JSON blob. It contains all type/documentation information
 /// about the language items in the local crate, as well as info about external items to allow
 /// tools to find or link to them.
-interface Crate {
+export interface Crate {
   /// The id of the root [`Module`] item of the local crate.
   root: Id;
   /// The version string given to `--crate-version`, if any.
@@ -20,7 +20,7 @@ interface Crate {
   format_version: number;
 }
 
-interface ExternalCrate {
+export interface ExternalCrate {
   name: string;
   html_root_url: string | null;
 }
@@ -30,7 +30,7 @@ interface ExternalCrate {
 /// question, or can be used by a tool that takes the json output of multiple crates to find
 /// the actual item definition with all the relevant info.
 
-interface ItemSummary {
+export interface ItemSummary {
   /// Can be used to look up the name and html_root_url of the crate this item came from in the
   /// `external_crates` map.
   crate_id: number;
@@ -41,7 +41,7 @@ interface ItemSummary {
   kind: ItemKind;
 }
 
-type Item = {
+export type Item = {
   /// The unique identifier of this item. Can be used to find this item in various mappings.
   id: Id;
   /// This can be used as a key to the `external_crates` map of [`Crate`] to see which crate
@@ -65,7 +65,7 @@ type Item = {
   deprecation: Deprecation | null;
 } & ItemEnum;
 
-interface Span {
+export interface Span {
   /// The path to the source file for this span relative to the path `rustdoc` was invoked with.
   filename: string;
   /// Zero indexed Line and Column of the first character of the `Span`
@@ -74,12 +74,12 @@ interface Span {
   end: [number, number];
 }
 
-interface Deprecation {
+export interface Deprecation {
   since: string | null;
   note: string | null;
 }
 
-const enum VisibilityEnum {
+export const enum VisibilityEnum {
   Public = "public",
   /// For the most part items are private by default. The exceptions are associated items of
   /// public traits and variants of public enums.
@@ -96,7 +96,7 @@ export type Visibility =
       };
     };
 
-type GenericArgs =
+export type GenericArgs =
   | {
       angle_bracketed: {
         args: GenericArg[];
@@ -110,7 +110,7 @@ type GenericArgs =
       };
     };
 
-type GenericArg =
+export type GenericArg =
   | {
       lifetime: string;
     }
@@ -122,20 +122,20 @@ type GenericArg =
     }
   | "infer";
 
-interface Constant {
+export interface Constant {
   type: Type;
   expr: string;
   value: string | null;
   is_literal: boolean;
 }
 
-interface TypeBinding {
+export interface TypeBinding {
   name: string;
   args: GenericArgs;
   binding: TypeBindingKind;
 }
 
-type TypeBindingKind =
+export type TypeBindingKind =
   | {
       equality: Term;
     }
@@ -143,9 +143,9 @@ type TypeBindingKind =
       constraint: GenericBound[];
     };
 
-type Id = string;
+export type Id = string;
 
-const enum ItemKind {
+export const enum ItemKind {
   Module = "module",
   ExternCrate = "extern_crate",
   Import = "import",
@@ -173,7 +173,7 @@ const enum ItemKind {
   Keyword = "keyword",
 }
 
-type ItemEnum =
+export type ItemEnum =
   | {
       kind: "module";
       inner: Module;
@@ -275,19 +275,19 @@ type ItemEnum =
         default: Type | null;
       };
     };
-interface Module {
+export interface Module {
   is_crate: boolean;
   items: Id[];
 }
 
-interface Union {
+export interface Union {
   generics: Generics;
   fields_stripped: boolean;
   fields: Id[];
   impls: Id[];
 }
 
-interface Struct {
+export interface Struct {
   struct_type: StructType;
   generics: Generics;
   fields_stripped: boolean;
@@ -295,14 +295,14 @@ interface Struct {
   impls: Id[];
 }
 
-interface Enum {
+export interface Enum {
   generics: Generics;
   variants_stripped: boolean;
   variants: Id[];
   impls: Id[];
 }
 
-type Variant =
+export type Variant =
   | {
       variant_kind: "plain";
     }
@@ -315,20 +315,20 @@ type Variant =
       variant_inner: Id[];
     };
 
-const enum StructType {
+export const enum StructType {
   Plain = "plain",
   Tuple = "tuple",
   Unit = "unit",
 }
 
-interface Header {
+export interface Header {
   const: boolean;
   unsafe: boolean;
   async: boolean;
   abi: Abi;
 }
 
-type Abi =
+export type Abi =
   | "Rust"
   | {
       C: { unwind: boolean };
@@ -358,30 +358,30 @@ type Abi =
       Other: string;
     };
 
-interface Function {
+export interface Function {
   decl: FnDecl;
   generics: Generics;
   header: Header;
 }
 
-interface Method {
+export interface Method {
   decl: FnDecl;
   generics: Generics;
   header: Header;
   has_body: boolean;
 }
 
-interface Generics {
+export interface Generics {
   params: GenericParamDef[];
   where_predicates: WherePredicate[];
 }
 
-interface GenericParamDef {
+export interface GenericParamDef {
   name: string;
   kind: GenericParamDefKind;
 }
 
-type GenericParamDefKind =
+export type GenericParamDefKind =
   | {
       lifetime: {
         outlives: string[];
@@ -424,7 +424,7 @@ type GenericParamDefKind =
       };
     };
 
-type WherePredicate =
+export type WherePredicate =
   | {
       bound_predicate: {
         type: Type;
@@ -444,7 +444,7 @@ type WherePredicate =
       };
     };
 
-type GenericBound =
+export type GenericBound =
   | {
       trait_bound: {
         trait: Type;
@@ -456,13 +456,13 @@ type GenericBound =
       outlives: string;
     };
 
-const enum TraitBoundModifier {
+export const enum TraitBoundModifier {
   None = "none",
   Maybe = "maybe",
   MaybeConst = "maybe_const",
 }
 
-type Term =
+export type Term =
   | {
       type: Type;
     }
@@ -470,7 +470,7 @@ type Term =
       constant: Constant;
     };
 
-type Type =
+export type Type =
   | {
       /// Structs, enums, and traits
       kind: "resolved_path";
@@ -551,19 +551,19 @@ type Type =
       };
     };
 
-interface FunctionPointer {
+export interface FunctionPointer {
   decl: FnDecl;
   generic_params: GenericParamDef[];
   header: Header;
 }
 
-interface FnDecl {
+export interface FnDecl {
   inputs: [string, Type][];
   output: Type | null;
   c_variadic: boolean;
 }
 
-interface Trait {
+export interface Trait {
   is_auto: boolean;
   is_unsafe: boolean;
   items: Id[];
@@ -572,12 +572,12 @@ interface Trait {
   implementations: Id[];
 }
 
-interface TraitAlias {
+export interface TraitAlias {
   generics: Generics;
   params: GenericBound[];
 }
 
-interface Impl {
+export interface Impl {
   is_unsafe: boolean;
   generics: Generics;
   provided_trait_methods: string[];
@@ -589,7 +589,7 @@ interface Impl {
   blanket_impl: Type | null;
 }
 
-interface Import {
+export interface Import {
   /// The full path being imported.
   source: string;
   /// May be different from the last segment of `source` when renaming imports:
@@ -601,12 +601,12 @@ interface Import {
   glob: boolean;
 }
 
-interface ProcMacro {
+export interface ProcMacro {
   kind: MacroKind;
   helpers: string[];
 }
 
-enum MacroKind {
+export const enum MacroKind {
   /// A bang macro `foo!()`.
   Bang = "bang",
   /// An attribute macro `#[foo]`.
@@ -615,17 +615,17 @@ enum MacroKind {
   Derive = "derive",
 }
 
-interface Typedef {
+export interface Typedef {
   type: Type;
   generics: Generics;
 }
 
-interface OpaqueTy {
+export interface OpaqueTy {
   bounds: GenericBound[];
   generics: Generics;
 }
 
-interface Static {
+export interface Static {
   type: Type;
   mutable: boolean;
   expr: string;
